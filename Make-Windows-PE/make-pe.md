@@ -72,7 +72,7 @@ X:\PE_Custom_Files\startup.cmd
 
 下载你喜欢的小工具的便携版（注意不要下载安装包），解压到工具路径内，完成后看起来像这样：
 
-![工具路径图例](C:\Users\zomby7e\CodeProjects\7EBLOG\Make-Windows-PE\工具路径.png)
+![工具路径图例](./工具路径.png)
 
 注意要在工具路径下面新建一个任意名称的资料夹，当作刚开机时的「桌面资料夹」使用。
 
@@ -150,7 +150,7 @@ MakeWinPEMedia /ISO "D:\WindowsPEx64" D:\winpe64.iso
 
 打开工具路径，为你想要启动的每一个小工具创建快捷方式，并且放到之前建立的 `startup` 资料夹内，因为这个资料夹开机就会打开，所以当作「桌面资料夹」来使用。*很遗憾没什么更好的创建方法了……*
 
-![创建快捷方式](C:\Users\zomby7e\CodeProjects\7EBLOG\Make-Windows-PE\创建快捷方式.png)
+![创建快捷方式](./创建快捷方式.png)
 
 记得把快捷方式复制出来，可以透过 USB 设备、电脑上的文件系统或者 SMB 网路传输。一定要复制出来，PE 系统的内容无法保存。
 
@@ -188,7 +188,7 @@ MakeWinPEMedia /ISO "D:\WindowsPEx64" D:\winpe64.iso
 
 ## 最终成果
 
-![成品](C:\Users\zomby7e\CodeProjects\7EBLOG\Make-Windows-PE\成品.png)
+![成品](./成品.png)
 
 ## 可能出现的问题
 
