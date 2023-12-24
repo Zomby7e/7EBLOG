@@ -6,13 +6,13 @@
 
 ## 需求和预期
 
-- 需求：我们需要 Windows 预安装环境是因为 Windows 安装镜像不能很好地进行分区工作，如果分区格式不正确，Windows 安装镜像内的向导会错误地显示「此电脑不兼容」。因此我们需要一个好用且可信任的 PE 镜像。
+- 需求：我们需要 Windows 预安装环境是因为 Windows 安装镜像不能很好地进行磁碟分割工作，如果分割区格式不正确，Windows 安装镜像内的向导会错误地认为你的电脑和 Windows 不相容。因此我们需要一个好用且可信任的 PE 镜像。
 - 旧的 Windows PE 可能缺少网卡、触摸板等设备的驱动程式。
 - 第三方 Windows PE 可能植入后门，可能包含盗版内容。
 - 第三方英语 Windows PE 不支持中文显示。
 - 预期：
   - 检查硬件信息
-  - 修改磁盘分区
+  - 修改磁碟
   - 系统部署/备份/维护
   - 文件管理
   - 正确读取中日韩文件路径
@@ -23,7 +23,7 @@
 - 虚拟机加 SMB 服务器
   - 或者一个至少 1G 的 USB 存储设备
 - 已安装 [Windows ADK](https://learn.microsoft.com/en-us/windows-hardware/get-started/adk-install) 的电脑
-- 自己需要的程序，比如第三方分区工具等
+- 自己需要的程序，比如第三方分割工具等
 
 ## 制作步骤
 
@@ -33,14 +33,14 @@
 
 安装 ADK 后请选择要进行修改和存储镜像的路径（请修改下面的代码再执行）。在 cmd 执行下面的命令可以释放 Windows PE 的镜像内容。*arm 本人尚未测试。*
 
-```cmd
+```shell
 :: First step
 copype amd64 D:\WindowsPEx64
 ```
 
 释放镜像之后还不可以修改，需要先挂载镜像：
 
-```cmd
+```shell
 Dism /Mount-Image /ImageFile:"D:\WindowsPEx64\media\sources\boot.wim" /index:1 /MountDir:"D:\WindowsPEx64\mount"
 ```
 
@@ -58,7 +58,7 @@ Dism /Mount-Image /ImageFile:"D:\WindowsPEx64\media\sources\boot.wim" /index:1 /
 
 先打开 PE 系统根目录下的 `Windows\System32\startnet.cmd` 这个文件，如果没有请创建，内容如下：
 
-```cmd
+```shell
 wpeinit
 powercfg /s 8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c
 X:\PE_Custom_Files\startup.cmd
@@ -78,7 +78,7 @@ X:\PE_Custom_Files\startup.cmd
 
 你应该至少添加一个文件管理器（因为系统不再自带），我这里使用的是 [Explorer++](https://explorerplusplus.com/download), 把它放在工具路径内，然后在开机脚本启动它，参数填写你刚刚新建的「桌面资料夹」。例子：
 
-```cmd
+```shell
 X:\PE_Custom_Files\explorerpp_x64\Explorer++.exe, "X:\PE_Custom_Files\startup\"
 ```
 
@@ -88,9 +88,9 @@ X:\PE_Custom_Files\explorerpp_x64\Explorer++.exe, "X:\PE_Custom_Files\startup\"
   - [CPU-Z](https://www.cpuid.com/softwares/cpu-z.html) (免费/专有软体) 查看处理器、显卡、内存等信息。
   - [CrystalDiskInfo](https://crystalmark.info/en/software/crystaldiskinfo/) (免费/开源/推荐) 查看硬碟信息的工具。（常用来查看 SSD 寿命）
   - [MemTest](https://www.techpowerup.com/memtest64/) (免费/开源/推荐) 内存测试工具。
-- 分区工具
-  - [DiskGenius](https://www.diskgenius.com/) (基础功能免费/闭源) 有分区、数据备份、恢复等功能。这个工具需要普通 Windows 系统的一个 DLL, 如果你它到 DiskGenius 的目录下，就可以正常运行。但是请注意，如果二次发布这些专有软体（包括 DiskGenius 和系统的 DLL），可能会违法用户协议，具体请以相关软件的协议文件为准。
-  - [Diskpart](https://learn.microsoft.com/zh-cn/windows-server/administration/windows-commands/diskpart) (提醒你它是系统自带的，不需要添加) 强大的分区工具，但是没有图形界面，如果你会，就不推荐别的。
+- 分割区工具
+  - [DiskGenius](https://www.diskgenius.com/) (基础功能免费/闭源) 有分割、数据备份、恢复等功能。这个工具需要普通 Windows 系统的一个 DLL, 如果你它到 DiskGenius 的目录下，就可以正常运行。但是请注意，如果二次发布这些专有软体（包括 DiskGenius 和系统的 DLL），可能会违法用户协议，具体请以相关软件的协议文件为准。
+  - [Diskpart](https://learn.microsoft.com/zh-cn/windows-server/administration/windows-commands/diskpart) (提醒你它是系统自带的，不需要添加) 强大的分割工具，但是没有图形界面，如果你会，就不推荐别的。
 - 系统部署
   - [Dism++](https://github.com/Chuyu-Team/Dism-Multi-language) (免费/开源/推荐) 可以用来备份和部署系统，优化系统的强大工具。
   - WinNTSetup (免费/专有)  发布于某论坛，请自行搜索，算是大家比较常用的系统安装工具。
@@ -104,7 +104,7 @@ X:\PE_Custom_Files\explorerpp_x64\Explorer++.exe, "X:\PE_Custom_Files\startup\"
 
 - 中日韩字体 (推荐添加)
 
-  ```cmd
+  ```shell
   :: Add fonts
   Dism /Add-Package /Image:"D:\WindowsPEx64\mount" /PackagePath:"C:\Program Files (x86)\Windows Kits\10\Assessment and Deployment Kit\Windows Preinstallation Environment\amd64\WinPE_OCs\WinPE-FontSupport-ZH-CN.cab"
   Dism /Add-Package /Image:"D:\WindowsPEx64\mount" /PackagePath:"C:\Program Files (x86)\Windows Kits\10\Assessment and Deployment Kit\Windows Preinstallation Environment\amd64\WinPE_OCs\WinPE-FontSupport-ZH-HK.cab"
@@ -134,7 +134,7 @@ X:\PE_Custom_Files\explorerpp_x64\Explorer++.exe, "X:\PE_Custom_Files\startup\"
 
 用以下命令会取消挂载并且封装镜像。
 
-```cmd
+```shell
 :: Unmount and commit
 Dism /Unmount-Image /MountDir:D:\WindowsPEx64\mount /Commit
 
@@ -160,19 +160,19 @@ MakeWinPEMedia /ISO "D:\WindowsPEx64" D:\winpe64.iso
 
 - shutdown.cmd
 
-  ```cmd
+  ```shell
   wpeutil shutdown
   ```
 
 - reboot.cmd
 
-  ```cmd
+  ```shell
   wpeutil reboot
   ```
 
 - readme.cmd
 
-  ```cmd
+  ```shell
   :: You cannot open txt files by double-click
   notepad readme.txt
   ```
@@ -189,6 +189,15 @@ MakeWinPEMedia /ISO "D:\WindowsPEx64" D:\winpe64.iso
 ## 最终成果
 
 ![成品](./成品.png)
+
+## 烧写方法二选一
+
+- 把 [Ventoy](https://www.ventoy.net/) 安装到 USB 存储设备，把制作好的 PE 镜像和 Windows 安装镜像复制到 USB 存储设备。
+- 手动制作
+  1. 打开任意分割工具，比如 `diskmgmt.msc`。
+  2. 为 USB 存储设备划分一个 1GB (或者略微大于 PE 镜像的分割区大小) 的 fat32 分割区。（格式不要错）
+  3. 提取 PE 镜像档全部内容到 fat32 分割区。
+  4. 将剩下的部分格式化为 exfat 或者 NTFS 档案系统，需要的 Windows 镜像档和其他资料都可以存在里面。
 
 ## 可能出现的问题
 
